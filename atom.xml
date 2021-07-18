@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>钟健的博客</title>
+  
+  <subtitle>卑微小钟</subtitle>
+  <link href="http://zhongblog.cn/atom.xml" rel="self"/>
+  
+  <link href="http://zhongblog.cn/"/>
+  <updated>2021-06-29T08:15:06.283Z</updated>
+  <id>http://zhongblog.cn/</id>
+  
+  <author>
+    <name>钟健</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SQLAlchemy之Column常用参数</title>
+    <link href="http://zhongblog.cn/2021/06/29/554a6533c1d0/"/>
+    <id>http://zhongblog.cn/2021/06/29/554a6533c1d0/</id>
+    <published>2021-06-29T08:14:47.000Z</published>
+    <updated>2021-06-29T08:15:06.283Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;SQLAlchemy之Column常用参数&quot;&gt;&lt;a href=&quot;#SQLAlchemy之Column常用参数&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="文章" scheme="http://zhongblog.cn/categories/%E6%96%87%E7%AB%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Pipeline去重操作</title>
+    <link href="http://zhongblog.cn/2021/06/24/cc432335efea/"/>
+    <id>http://zhongblog.cn/2021/06/24/cc432335efea/</id>
+    <published>2021-06-24T07:33:38.000Z</published>
+    <updated>2021-06-24T07:34:07.132Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;Pipeline去重操作&quot;&gt;&lt;a href=&quot;#Pipeline去重操作&quot; class=&quot;headerlink&quot; title=&quot;Pipeline去重操作&quot;&gt;&lt;/a&gt;Pipeline去重操作&lt;/h1&gt;&lt;p&gt;当item（数据）被搜集后，都会被传递到Item</summary>
+        
+      
+    
+    
+    
+    <category term="文章" scheme="http://zhongblog.cn/categories/%E6%96%87%E7%AB%A0/"/>
+    
+    
+  </entry>
+  
+</feed>

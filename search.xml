@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>SQLAlchemy之Column常用参数</title>
+    <url>/2021/06/29/554a6533c1d0/</url>
+    <content><![CDATA[<h1 id="SQLAlchemy之Column常用参数"><a href="#SQLAlchemy之Column常用参数" class="headerlink" title="SQLAlchemy之Column常用参数"></a>SQLAlchemy之Column常用参数</h1><h2 id="一、常用参数"><a href="#一、常用参数" class="headerlink" title="一、常用参数"></a>一、常用参数</h2><ol>
+<li><p><strong>primary_key</strong>：<code>True</code> 设置某个字段为<strong>主键</strong>。</p>
+</li>
+<li><p><strong>autoincrement</strong>：<code>True</code> 设置这个字段为<strong>自增长</strong>。</p>
+</li>
+<li><p><strong>default</strong>： 设置字段的<strong>默认值</strong>。</p>
+</li>
+<li><p><strong>nullable</strong>：指定某个字段是否为空。默认值是True，可以为空。</p>
+</li>
+<li><p><strong>unique</strong>：指定某个字段的值是否唯一，默认是False。</p>
+</li>
+<li><p><strong>onupdate</strong>：在数据更新的时候会调用这个参数指定的值或者函数。在第一次插入这条数据的时候，不会用<strong>onupdate</strong>的值，只会使用<strong>default</strong>的值。常用于是字段（每次更新数据的时候都要更新该字段值）。</p>
+</li>
+<li><p><strong>name</strong>：指定<strong>ORM</strong>模型的中某个属性映射到<strong>表中的字段名</strong>。如果不指定，那么会<strong>使用这个属性的名字来作为字段名</strong>。如果指定了，就会使用指定的这个值作为表字段名。这个参数也可以当作位置参数，<strong>在第1个参数来指定</strong>。</p>
+</li>
+</ol>
+<h2 id="二、参考用法"><a href="#二、参考用法" class="headerlink" title="二、参考用法"></a>二、参考用法</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TableName</span>(<span class="params">db.Model</span>):</span></span><br><span class="line">    __tablename__ = <span class="string">&#x27;table_name&#x27;</span>					<span class="comment"># 当数据库的表名与类名不对应时需要设置</span></span><br><span class="line">    __table_args__ = &#123;<span class="string">&#x27;extend_existing&#x27;</span>: <span class="literal">True</span>&#125;		<span class="comment"># 避免flask迁移数据库,二次创建表问题</span></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)	<span class="comment"># sqlalchemy必须要</span></span><br><span class="line">	title = Column(db.String(<span class="number">50</span>),name=<span class="string">&#x27;title&#x27;</span>,nullable=<span class="literal">False</span>)</span><br><span class="line">	<span class="comment"># title = Column(&#x27;my_title&#x27;,db.String(50),nullable=False)</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>文章</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Pipeline去重操作</title>
+    <url>/2021/06/24/cc432335efea/</url>
+    <content><![CDATA[<h1 id="Pipeline去重操作"><a href="#Pipeline去重操作" class="headerlink" title="Pipeline去重操作"></a>Pipeline去重操作</h1><p>当item（数据）被搜集后，都会被传递到Item Pipeline进行处理，我们可以先对数据进行处理比如：<strong>去重</strong></p>
+<p>常见案例：</p>
+<h3 id="重复过滤器"><a href="#重复过滤器" class="headerlink" title="重复过滤器"></a>重复过滤器</h3><p>一个筛选器，用于查找重复项，并删除那些已经处理过的项。假设我们的商品具有唯一的ID，但是我们的Spider会返回具有相同ID的多个商品：<a href="https://docs.scrapy.org/en/latest/topics/item-pipeline.html">官方文档</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> itemadapter <span class="keyword">import</span> ItemAdapter</span><br><span class="line"><span class="keyword">from</span> scrapy.exceptions <span class="keyword">import</span> DropItem</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DuplicatesPipeline</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.ids_seen = <span class="built_in">set</span>()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_item</span>(<span class="params">self, item, spider</span>):</span></span><br><span class="line">        adapter = ItemAdapter(item)</span><br><span class="line">        <span class="keyword">if</span> adapter[<span class="string">&#x27;id&#x27;</span>] <span class="keyword">in</span> self.ids_seen:</span><br><span class="line">            <span class="keyword">raise</span> DropItem(<span class="string">f&quot;Duplicate item found: <span class="subst">&#123;item!r&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.ids_seen.add(adapter[<span class="string">&#x27;id&#x27;</span>])</span><br><span class="line">            <span class="keyword">return</span> item</span><br></pre></td></tr></table></figure>
+
+<h2 id="激活项目管道组件"><a href="#激活项目管道组件" class="headerlink" title="激活项目管道组件"></a>激活项目管道组件</h2><p>要激活Item Pipeline组件，必须将其类添加到 <a href="https://docs.scrapy.org/en/latest/topics/settings.html#std-setting-ITEM_PIPELINES"><code>ITEM_PIPELINES</code></a>设置中，如以下示例所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ITEM_PIPELINES = &#123;</span><br><span class="line">    &#x27;myproject.pipelines.DuplicatesPipeline&#x27;: 800,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>您在此设置中分配给类的整数值确定它们运行的顺序：项目从值较低的类转到值较高的类。通常将这些数字定义在0-1000范围内。</p>
+]]></content>
+      <categories>
+        <category>文章</category>
+      </categories>
+  </entry>
+</search>
