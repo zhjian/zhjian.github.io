@@ -84,4 +84,37 @@
         <category>文章</category>
       </categories>
   </entry>
+  <entry>
+    <title>scrapy如何降低反爬风险</title>
+    <url>/2021/08/29/a0424ab16692/</url>
+    <content><![CDATA[<h1 id="scrapy如何降低反爬风险"><a href="#scrapy如何降低反爬风险" class="headerlink" title="scrapy如何降低反爬风险"></a>scrapy如何降低反爬风险</h1><p><strong>1、设置时间间隔，降低爬取速度</strong></p>
+<p>打开setting.py设置</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#减少请求并发数量</span></span><br><span class="line">CONCURRENT_REQUESTS = <span class="number">4</span></span><br><span class="line">CONCURRENT_REQUESTS_PER_DOMAIN = <span class="number">4</span></span><br><span class="line">CONCURRENT_REQUESTS_PER_IP = <span class="number">4</span></span><br><span class="line"><span class="comment">#设置请求间隔</span></span><br><span class="line">DOWNLOAD_DELAY = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>2.设置随机请求头部</strong></p>
+<p>middlewares.py</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserAgentDownloadMiddleWare</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    USER_AGENTS = [</span><br><span class="line">        <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 &#x27;</span></span><br><span class="line">        <span class="string">&#x27;Safari/537.36&#x27;</span>, </span><br><span class="line">        <span class="string">&#x27;Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/44.0.2403.155 Safari/537.36&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Mozilla/5.0 (Macintosh; U; PPC Mac OS X; pl-PL; rv:1.0.1) Gecko/20021111 Chimera/0.6&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 &#x27;</span></span><br><span class="line">        <span class="string">&#x27;Safari/537.36&#x27;</span>, </span><br><span class="line">        <span class="string">&#x27;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/418.8 (KHTML, like Gecko, &#x27;</span></span><br><span class="line">        <span class="string">&#x27;Safari) Cheshire/1.0.UNOFFICIAL&#x27;</span>, </span><br><span class="line">        <span class="string">&#x27;Mozilla/5.0 (X11; U; Linux i686; nl; rv:1.8.1b2) Gecko/20060821 BonEcho/2.0b2 (Debian-1.99+2.0b2+dfsg-1)&#x27;</span></span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_request</span>(<span class="params">self, request, spider</span>):</span></span><br><span class="line">        user_agent = random.choice(self.USER_AGENTS)</span><br><span class="line">        request.headers[<span class="string">&#x27;User-Agent&#x27;</span>] = user_agent</span><br></pre></td></tr></table></figure>
+
+<p>setting.py</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">DOWNLOADER_MIDDLEWARES = &#123;</span><br><span class="line">    <span class="string">&#x27;douban.middlewares.UserAgentDownloadMiddleWare&#x27;</span>: <span class="number">543</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>3、禁用cookie</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">COOKIES_ENABLED = False</span><br></pre></td></tr></table></figure>
+
+<p><strong>4、使用动态IP代理</strong></p>
+<ol>
+<li><p>打开 Scrapy 项目下的 middlewares.py 文件，在该文件中增加定义如下类：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class RandomProxyMiddleware (object) :#动态设置代理服务器的IP 地址    </span><br><span class="line">	def process request (self, request, spider):        # 	      </span><br><span class="line">    	get_random_proxy() 函数随机返回代理服务器的IP 地址和端口        			     				request.meta[&quot;proxy&quot;] = get_random_proxy()</span><br></pre></td></tr></table></figure>
+
+<p>上面程序通过自定义的下载中间件为 Scrapy 设置了代理服务器。程序中的 get_random_proxy() 函数需要能随机返回代理服务器的 IP 地址和端口，这就需要开发者事先准备好一系列代理服务器，该函数能随机从这些代理服务器中选择一个。</p>
+</li>
+<li><p>通过 settings.py 文件设置启用自定义的下载中间件。在 settings.py 文件中增加如下配置代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#配置自定义的下载中间件</span><br><span class="line">DOWNLOADER MIDDLEWARES = &#123;</span><br><span class="line">  &#x27;demo.middlewares.RandomProxyMiddleware&#x27;: 543,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>5、违反爬虫规则文件</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ROBOTSTXT_OBEY =  False</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>文章</category>
+      </categories>
+  </entry>
 </search>

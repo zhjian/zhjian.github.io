@@ -6,7 +6,7 @@
   <link href="http://zhongblog.cn/atom.xml" rel="self"/>
   
   <link href="http://zhongblog.cn/"/>
-  <updated>2021-06-29T08:15:06.283Z</updated>
+  <updated>2021-09-10T12:28:01.387Z</updated>
   <id>http://zhongblog.cn/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>scrapy如何降低反爬风险</title>
+    <link href="http://zhongblog.cn/2021/08/29/a0424ab16692/"/>
+    <id>http://zhongblog.cn/2021/08/29/a0424ab16692/</id>
+    <published>2021-08-29T08:14:47.000Z</published>
+    <updated>2021-09-10T12:28:01.387Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;scrapy如何降低反爬风险&quot;&gt;&lt;a href=&quot;#scrapy如何降低反爬风险&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="文章" scheme="http://zhongblog.cn/categories/%E6%96%87%E7%AB%A0/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>SQLAlchemy之Column常用参数</title>
