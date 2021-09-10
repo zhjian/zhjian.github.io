@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Pipeline去重操作</title>
+    <title>Liunx 安装java</title>
     <url>/2021/06/24/b5df2b11e08c/</url>
     <content><![CDATA[<h1 id="Liunx-安装java"><a href="#Liunx-安装java" class="headerlink" title="Liunx 安装java"></a>Liunx 安装java</h1><p><strong>一、下载JDK并上传到服务器</strong></p>
 <p>可用Xftp上传</p>
